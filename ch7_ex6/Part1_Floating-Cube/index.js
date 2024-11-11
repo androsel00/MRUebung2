@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-// global scene values
+    // global scene values
 var btn, gl, glCanvas, camera, scene, renderer, cube;
 
 // global xr value
