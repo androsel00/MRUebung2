@@ -21,6 +21,8 @@ function loadScene() {
         1000
     );
 
+
+
     scene = new THREE.Scene();
 
     var light = new THREE.HemisphereLight( 0xffffff, 0xbbbbff, 1 );
@@ -42,10 +44,60 @@ function loadScene() {
     });
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
+    // Renderer Schatten aktivieren
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Optionale Einstellung für weichere Schatten
     renderer.xr.enabled = true;
     document.body.appendChild( renderer.domElement );
 }
+// Directional Light hinzufügen
+var dirLight = new THREE.DirectionalLight(0xffffff, 1);
+dirLight.position.set(3, 5, 2); // Position über der Szene
+dirLight.castShadow = true;    // Schatten aktivieren
 
+// Konfiguriere den Schattenwurf des Lichts
+dirLight.shadow.mapSize.width = 1024; // Auflösung des Schattenmaps
+dirLight.shadow.mapSize.height = 1024;
+dirLight.shadow.camera.near = 0.5;    // Nahe Grenze des Schattens
+dirLight.shadow.camera.far = 50;      // Entfernte Grenze des Schattens
+dirLight.shadow.camera.left = -5;     // Grenzen für den Schattenbereich
+dirLight.shadow.camera.right = 5;
+dirLight.shadow.camera.top = 5;
+dirLight.shadow.camera.bottom = -5;
+
+scene.add(dirLight);
+
+// Boden hinzufügen
+const planeGeometry = new THREE.PlaneGeometry(10, 10);
+const planeMaterial = new THREE.MeshStandardMaterial({ color: 0x808080 });
+const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+
+// Bodenrotation und Position
+plane.rotation.x = -Math.PI / 2; // Flach auf den Boden legen
+plane.position.y = 0;           // Boden auf y=0 setzen
+plane.receiveShadow = true;     // Schatten empfangen
+
+scene.add(plane);
+
+
+/*
+
+// Konfiguriere den Schattenwurf des Lichts
+light.shadow.mapSize.width = 1024; // Auflösung des Schattenmaps (je höher, desto detaillierter)
+light.shadow.mapSize.height = 1024;
+light.shadow.camera.near = 0.5; // Nahe Grenze für den Schatten
+light.shadow.camera.far = 50;  // Entfernte Grenze für den Schatten
+
+// **Boden hinzufügen (empfängt Schatten)**
+const planeGeometry = new THREE.PlaneGeometry(10, 10);
+const planeMaterial = new THREE.MeshStandardMaterial({ color: 0x808080 });
+const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+plane.rotation.x = -Math.PI / 2; // Flach auf den Boden legen
+plane.position.y = -1; // Unterhalb des Objekts
+plane.receiveShadow = true; // **Empfängt Schatten**
+scene.add(plane);
+
+*/
 function init() {
         navigator.xr.isSessionSupported('immersive-ar')
             .then((supported) => {
@@ -101,21 +153,6 @@ function setupWebGLLayer() {
     });
 }
 
-
-// Konfiguriere den Schattenwurf des Lichts
-light.shadow.mapSize.width = 1024; // Auflösung des Schattenmaps (je höher, desto detaillierter)
-light.shadow.mapSize.height = 1024;
-light.shadow.camera.near = 0.5; // Nahe Grenze für den Schatten
-light.shadow.camera.far = 50;  // Entfernte Grenze für den Schatten
-
-// **Boden hinzufügen (empfängt Schatten)**
-const planeGeometry = new THREE.PlaneGeometry(10, 10);
-const planeMaterial = new THREE.MeshStandardMaterial({ color: 0x808080 });
-const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-plane.rotation.x = -Math.PI / 2; // Flach auf den Boden legen
-plane.position.y = -1; // Unterhalb des Objekts
-plane.receiveShadow = true; // **Empfängt Schatten**
-scene.add(plane);
 
 
 
