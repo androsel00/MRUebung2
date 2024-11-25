@@ -25,12 +25,14 @@ function loadScene() {
 
     var light = new THREE.HemisphereLight( 0xffffff, 0xbbbbff, 1 );
 				light.position.set( 0.5, 1, 0.25 );
+                light.castShadow = true; // **Schatten für das Licht aktivieren**
                 scene.add( light );
 
     var geometry = new THREE.BoxBufferGeometry(0.2, 0.2, 0.2);
     var material = new THREE.MeshPhongMaterial({color: 0x89CFF0});
     cube = new THREE.Mesh( geometry, material );
     cube.position.y = 0.2;
+    cube.castShadow = true; // **Wirft Schatten**
     scene.add( cube );
 
     // setup Three.js WebGL renderer
@@ -98,6 +100,24 @@ function setupWebGLLayer() {
         xrSession.updateRenderState( {baseLayer: new XRWebGLLayer(xrSession, gl) });
     });
 }
+
+
+// Konfiguriere den Schattenwurf des Lichts
+light.shadow.mapSize.width = 1024; // Auflösung des Schattenmaps (je höher, desto detaillierter)
+light.shadow.mapSize.height = 1024;
+light.shadow.camera.near = 0.5; // Nahe Grenze für den Schatten
+light.shadow.camera.far = 50;  // Entfernte Grenze für den Schatten
+
+// **Boden hinzufügen (empfängt Schatten)**
+const planeGeometry = new THREE.PlaneGeometry(10, 10);
+const planeMaterial = new THREE.MeshStandardMaterial({ color: 0x808080 });
+const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+plane.rotation.x = -Math.PI / 2; // Flach auf den Boden legen
+plane.position.y = -1; // Unterhalb des Objekts
+plane.receiveShadow = true; // **Empfängt Schatten**
+scene.add(plane);
+
+
 
 function animate() {
     renderer.setAnimationLoop(render);
