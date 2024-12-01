@@ -4,29 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebXR API: Ch. 7 Ex. 6 Pt. 2</title>
-    <div id="button-container"></div>
     <style>
-    #button-container {
-        display: flex; 
-        gap: 10px; 
-        justify-content: center;
-        margin-top: 10px;
-    }
+        #button-container {
+            display: flex; 
+            gap: 10px; 
+            justify-content: center;
+            margin-top: 10px;
+        }
+    
+        #button-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease;
+        }
+    
+        #button-container button:hover {
+            background-color: #e0e0e0; 
+        }
+    </style>
+    <div id="button-container"></div>
 
-    #button-container button {
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-        transition: background-color 0.3s ease;
-    }
-
-    #button-container button:hover {
-        background-color: #e0e0e0; /* Change background color on hover */
-    }
-</style>
 
     
     <script type="importmap">
