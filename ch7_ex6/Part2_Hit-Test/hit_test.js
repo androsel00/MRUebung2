@@ -68,29 +68,31 @@ function loadScene() {
         reticle.visible = false;
         scene.add(reticle);
         
-        // begin xr query
+        // begin ar query
         navigator.xr.isSessionSupported('immersive-ar')
-                .then((supported) => {
-                  if (supported) {
-                        btn = document.createElement("button");
-                        btn.addEventListener('click', onRequestSession);
-                        btn.innerHTML = "Enter XR";
-                        var header = document.querySelector("header");
-                        header.appendChild(btn);
+            .then((arSupported) => {
+                if (arSupported) {
+                    const arBtn = document.createElement("button");
+                    arBtn.addEventListener('click', () => onRequestSession('immersive-ar'));
+                    arBtn.innerHTML = "Enter AR";
+                    const header = document.querySelector("header");
+                    header.appendChild(arBtn);
                 }
-                  else {
-                        navigator.xr.isSessionSupported('inline')
-                        .then((supported) => {
-                                if (supported) {
-                                console.log('inline session supported')
-                                }
-                                else {console.log('inline not supported')};
-                        })
-                  }
-                })
-                .catch((reason) => {
-                        console.log('WebXR not supported: ' + reason);
-                });
+            });
+         // begin vr query
+        navigator.xr.isSessionSupported('immersive-vr')
+            .then((vrSupported) => {
+                if (vrSupported) {
+                    const vrBtn = document.createElement("button");
+                    vrBtn.addEventListener('click', () => onRequestSession('immersive-vr'));
+                    vrBtn.innerHTML = "Enter VR";
+                    const header = document.querySelector("header");
+                    header.appendChild(vrBtn);
+                }
+            })
+            .catch((reason) => {
+                console.log('WebXR not supported: ' + reason);
+            });
 }
 
 // request immersive-ar session with hit-test
