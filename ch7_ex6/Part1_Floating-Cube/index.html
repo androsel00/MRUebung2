@@ -24,7 +24,29 @@ html
         shadow
         receive-shadow="true"
       ></a-plane>
-  
+      
+      <a-box
+        position="0 0.5 0"
+        width="1"
+        height="1"
+        depth="1"
+        shadow="cast: true"
+        material="side: double"
+      
+        ><a-mixin
+          id="top"
+          material="src: url(https://www.filterforge.com/filters/11635-v7.jpg)"
+        ></a-mixin>
+        <a-mixin
+          id="side"
+          material="src: url(https://i.pinimg.com/474x/49/e5/00/49e50066f7abd4b201e9a89fca949cfa.jpg)"
+        ></a-mixin>
+        <a-mixin
+          id="bottom"
+          material="src: url(https://i.pinimg.com/474x/49/e5/00/49e50066f7abd4b201e9a89fca949cfa.jpg)"
+        ></a-mixin>
+      </a-box>
+
       <a-box
         position="-8 0.5 -8"
         rotation="0 45 0"
@@ -34,17 +56,6 @@ html
         src="https://cdn.aframe.io/a-painter/images/floor.jpg"
         shadow="cast: true"
       ></a-box>
-
-      <a-box
-        position="-8 1.5 -8"
-        rotation="0 30 0"
-        width="1"
-        height="1"
-        depth="1"
-        src="https://cdn.aframe.io/a-painter/images/floor.jpg"
-        shadow="cast: true"
-      ></a-box>
-
       <a-box
         position="-2 0.5 -5"
         rotation="0 30 0"
