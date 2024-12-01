@@ -73,24 +73,21 @@ function loadScene() {
             .then((arSupported) => {
                 if (arSupported) {
                     const arBtn = document.createElement("button");
-                    arBtn.addEventListener('click', () => onRequestSession('immersive-ar'));
                     arBtn.innerHTML = "Enter AR";
-                    const container = document.querySelector("#button-container");
-                    container.appendChild(arBtn); 
+                    arBtn.addEventListener('click', () => onRequestSession('immersive-ar'));
+                    document.querySelector("#button-container").appendChild(arBtn);
                 }
             });
         
-        // Begin VR query
         navigator.xr.isSessionSupported('immersive-vr')
             .then((vrSupported) => {
                 if (vrSupported) {
                     const vrBtn = document.createElement("button");
-                    vrBtn.addEventListener('click', () => onRequestSession('immersive-vr'));
                     vrBtn.innerHTML = "Enter VR";
-                    const container = document.querySelector("#button-container");
-                    container.appendChild(vrBtn); 
+                    vrBtn.addEventListener('click', () => onRequestSession('immersive-vr'));
+                    document.querySelector("#button-container").appendChild(vrBtn);
                 }
-            })
+            });
             .catch((reason) => {
                 console.log('WebXR not supported: ' + reason);
             });
@@ -98,29 +95,36 @@ function loadScene() {
 }
 
 // request immersive-ar session with hit-test
-function onRequestSession() {
-    console.log("requesting session");
-    navigator.xr.requestSession('immersive-ar', {requiredFeatures: ['hit-test'], optionalFeatures: ['local-floor']})
-        .then(onSessionStarted)
+function onRequestSession(mode) {
+    console.log(`requesting ${mode} session`);
+    const options = mode === 'immersive-ar' 
+        ? { requiredFeatures: ['hit-test'], optionalFeatures: ['local-floor'] }
+        : {};
+
+    navigator.xr.requestSession(mode, options)
+        .then((session) => onSessionStarted(session, mode))
         .catch((reason) => {
-            console.log('request disabled: ' + reason);
+            console.log(`request for ${mode} disabled: ${reason}`);
         });
 }
 
-function onSessionStarted(session) {
-    console.log('starting session');
-    btn.removeEventListener('click', onRequestSession);
-    btn.addEventListener('click', endXRSession);
-    btn.innerHTML = "STOP AR";
-    xrSession = session; 
-    xrSession.addEventListener("end", endXRSession);
+function onSessionStarted(session, mode) {
+    console.log(`starting ${mode} session`);
+
+    const container = document.querySelector("#button-container");
+    container.style.display = "none";
+
+    xrSession = session;
+    xrSession.addEventListener("end", () => onSessionEnd(mode));
+
     setupWebGLLayer()
-        .then(()=> {
+        .then(() => {
             renderer.xr.setReferenceSpaceType('local');
             renderer.xr.setSession(xrSession);
             animate();
-        })
+        });
 }
+
 
 function setupWebGLLayer() {
     return gl.makeXRCompatible().then(() => {
@@ -182,11 +186,11 @@ function endXRSession() {
     else {onSessionEnd();}
 }
 
-function onSessionEnd() {
+function onSessionEnd(mode) {
+    console.log(`${mode} session ended`);
     xrSession = null;
-    console.log('session ended');
-    btn.innerHTML = "START AR";
-    btn.removeEventListener('click', endXRSession);
-    btn.addEventListener('click', onRequestSession);
-    window.requestAnimationFrame(render);
+
+    const container = document.querySelector("#button-container");
+    container.style.display = "flex";
 }
+
