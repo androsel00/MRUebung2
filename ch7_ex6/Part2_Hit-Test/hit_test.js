@@ -68,31 +68,33 @@ function loadScene() {
         reticle.visible = false;
         scene.add(reticle);
         
-        // begin ar query
+        // Begin AR query
         navigator.xr.isSessionSupported('immersive-ar')
             .then((arSupported) => {
                 if (arSupported) {
                     const arBtn = document.createElement("button");
                     arBtn.addEventListener('click', () => onRequestSession('immersive-ar'));
                     arBtn.innerHTML = "Enter AR";
-                    const header = document.querySelector("header");
-                    header.appendChild(arBtn);
+                    const container = document.querySelector("#button-container");
+                    container.appendChild(arBtn); 
                 }
             });
-         // begin vr query
+        
+        // Begin VR query
         navigator.xr.isSessionSupported('immersive-vr')
             .then((vrSupported) => {
                 if (vrSupported) {
                     const vrBtn = document.createElement("button");
                     vrBtn.addEventListener('click', () => onRequestSession('immersive-vr'));
                     vrBtn.innerHTML = "Enter VR";
-                    const header = document.querySelector("header");
-                    header.appendChild(vrBtn);
+                    const container = document.querySelector("#button-container");
+                    container.appendChild(vrBtn); 
                 }
             })
             .catch((reason) => {
                 console.log('WebXR not supported: ' + reason);
             });
+
 }
 
 // request immersive-ar session with hit-test
